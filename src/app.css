@@ -1,2 +1,17 @@
 @import 'tailwindcss';
-@plugin '@tailwindcss/typography';
+
+@plugin "daisyui" {
+  themes: light --default, dark --prefersdark, nord;
+}
+
+.faustina {
+  font-family: 'Faustina', serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
+.montserrat {
+  font-family: 'Montserrat', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
