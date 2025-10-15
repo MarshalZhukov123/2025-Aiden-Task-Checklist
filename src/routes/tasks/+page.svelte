@@ -1,5 +1,6 @@
 <script>
-	let categories = $state(['Category 1', 'Category 2', 'Category 3']);
+	let categories = $state(['Home', 'Work', 'School']);
+	import filteredSorted from '../tags/+page.svelte';
 
 	let todos = $state([
 		{
@@ -131,7 +132,7 @@
 	}
 
 	function deleteTask(id) {
-		if (!confirm('Are you sure?')) return;
+		if (!confirm('Are you sure you want to delete this task?')) return;
 		for (let i = 0; i < todos.length; i++) {
 			if (todos[i].id === id) {
 				todos[i].isComplete = true;
@@ -299,147 +300,159 @@
 </div>
 <hr />
 
-<ul class="m-1 p-1">
-	{#each todosNotComplete as v, i}
-		<li>
-			<div class="font-bold {`${v.category == '' && 'hidden'}`}">[{v.category}]</div>
-
-			<input
-				type="checkbox"
-				bind:checked={v.isComplete}
-				class="checkbox checkbox-primary"
-				onclick={() => markComplete(v.id)}
-			/>
-			<button
-				class="m-0.5 h-8 w-16 rounded-xl border bg-accent p-1 font-semibold hover:bg-blue-300 disabled:text-gray-500"
-				onclick={() => flag(v.id)}
-			>
-				{new Array(v.importance).fill('★').join('')}
-			</button>
-
-			{v.name} ({new Array(v.numPomodoros).fill('🍅').join('')}
-			<button
-				class="m-0.5 rounded-xl border bg-secondary p-1 hover:bg-primary"
-				onclick={() => addP(v.id)}>+🍅</button
-			>
-
-			<button
-				class="m-0.5 rounded-xl border bg-secondary p-1 hover:bg-primary"
-				onclick={() => subP(v.id)}>-🍅</button
-			>)
-
-			<div class="m-0.5 pl-5">
-				{#each v.subTodos as subv, subi}
-					<li>
-						<input type="checkbox" class="checkbox checkbox-primary" />
-						{subv.subName}
-					</li>
-				{/each}
-			</div>
-
-			<div
-				class="{`${v.dueDate == '' && 'hidden'}`} {`${v.dueDate <= formattedToday && 'font-semibold text-error'}`}"
-			>
-				Due: {v.dueDate}
-			</div>
-
-			<div class="text-sm">
-				<button
-					class="m-0.5 rounded-xl border bg-success p-1 font-semibold hover:bg-green-300 disabled:text-gray-500"
-					onclick={() => startTimer(v.id)}
-					disabled={running == true}>Start Timer</button
-				>
+<div class="flex">
+	<ul class="m-1 w-2/3 border-r p-1">
+		<div class="faustina text-center text-4xl font-semibold">Tasks</div>
+		<hr />
+		{#each todosNotComplete as v, i}
+			<li>
+				<div class="font-bold {`${v.category == '' && 'hidden'}`}">[{v.category}]</div>
 
 				<input
-					class="m-0.5 rounded-xl border bg-info p-1 text-black focus:ring-2 focus:ring-primary focus:outline-none"
-					placeholder="Add a new subtask..."
-					bind:value={v.inputSubTodo}
+					type="checkbox"
+					bind:checked={v.isComplete}
+					class="checkbox checkbox-primary"
+					onclick={() => markComplete(v.id)}
 				/>
-
 				<button
-					class="m-0.5 rounded-xl border bg-info p-1 font-semibold hover:bg-purple-300 disabled:text-gray-500"
-					onclick={() => subAdd(v.id)}
-					disabled={v.inputSubTodo.length == 0}>Add Subtask</button
+					class="m-0.5 h-8 w-16 rounded-xl border bg-accent p-1 font-semibold hover:bg-blue-300 disabled:text-gray-500"
+					onclick={() => flag(v.id)}
+				>
+					{new Array(v.importance).fill('★').join('')}
+				</button>
+
+				{v.name} ({new Array(v.numPomodoros).fill('🍅').join('')}
+				<button
+					class="m-0.5 rounded-xl border bg-secondary p-1 hover:bg-primary"
+					onclick={() => addP(v.id)}>+🍅</button
 				>
 
 				<button
-					class="m-0.5 rounded-xl border bg-error p-1 font-semibold hover:bg-red-300"
-					onclick={() => deleteTask(v.id)}>Delete Task</button
-				>
-			</div>
+					class="m-0.5 rounded-xl border bg-secondary p-1 hover:bg-primary"
+					onclick={() => subP(v.id)}>-🍅</button
+				>)
 
-			<div
-				class={`${activeTask !== v.id && 'hidden'} card m-3 w-120 border border-2 border-accent bg-secondary text-primary-content`}
-			>
-				<div class="card-body">
-					<div class="card-actions justify-end">
-						<button
-							class="btn btn-square border border-accent bg-primary btn-sm"
-							onclick={hidePopup}
-						>
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								class="h-6 w-6"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke="currentColor"
+				<div class="m-0.5 pl-5">
+					{#each v.subTodos as subv, subi}
+						<li>
+							<input type="checkbox" class="checkbox checkbox-primary" />
+							{subv.subName}
+						</li>
+					{/each}
+				</div>
+
+				<div
+					class="{`${v.dueDate == '' && 'hidden'}`} {`${v.dueDate <= formattedToday && 'font-semibold text-error'}`}"
+				>
+					Due: {v.dueDate}
+				</div>
+
+				<div class="text-sm">
+					<button
+						class="m-0.5 rounded-xl border bg-success p-1 font-semibold hover:bg-green-300 disabled:text-gray-500"
+						onclick={() => startTimer(v.id)}
+						disabled={running == true}>Start Timer</button
+					>
+
+					<input
+						class="m-0.5 rounded-xl border bg-info p-1 text-black focus:ring-2 focus:ring-primary focus:outline-none"
+						placeholder="Add a new subtask..."
+						bind:value={v.inputSubTodo}
+					/>
+
+					<button
+						class="m-0.5 rounded-xl border bg-info p-1 font-semibold hover:bg-purple-300 disabled:text-gray-500"
+						onclick={() => subAdd(v.id)}
+						disabled={v.inputSubTodo.length == 0}>Add Subtask</button
+					>
+
+					<button
+						class="m-0.5 rounded-xl border bg-error p-1 font-semibold hover:bg-red-300"
+						onclick={() => deleteTask(v.id)}>Delete Task</button
+					>
+				</div>
+
+				<div
+					class={`${activeTask !== v.id && 'hidden'} card m-3 w-120 border border-2 border-accent bg-secondary text-primary-content`}
+				>
+					<div class="card-body">
+						<div class="card-actions justify-end">
+							<button
+								class="btn btn-square border border-accent bg-primary btn-sm"
+								onclick={hidePopup}
 							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									stroke-width="2"
-									d="M6 18L18 6M6 6l12 12"
-								/>
-							</svg>
-						</button>
-					</div>
-
-					<div class={`${working !== true && 'hidden'}`}>
-						<h2 class="card-title">Task Started!</h2>
-						<div>
-							You have {parseInt(workseconds / 60)} minutes and {workseconds % 60} seconds left until
-							your next break.
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="h-6 w-6"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
+									<path
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										stroke-width="2"
+										d="M6 18L18 6M6 6l12 12"
+									/>
+								</svg>
+							</button>
 						</div>
 
-						<ProgressBar color={'bg-error'} current={workprogress} max={100} />
-					</div>
+						<div class={`${working !== true && 'hidden'}`}>
+							<h2 class="card-title">Task Started!</h2>
+							<div>
+								You have {parseInt(workseconds / 60)} minutes and {workseconds % 60} seconds left until
+								your next break.
+							</div>
 
-					<div class={`${working === true && 'hidden'}`}>
-						<h2 class="card-title">Break Time!</h2>
-						<div>
-							You have {parseInt(breakseconds / 60)} minutes and {breakseconds % 60} seconds left until
-							your next work session. Try to avoid checking social media.
+							<ProgressBar color={'bg-error'} current={workprogress} max={100} />
 						</div>
 
-						<ProgressBar color={'bg-success'} current={breakprogress} max={100} />
-					</div>
+						<div class={`${working === true && 'hidden'}`}>
+							<h2 class="card-title">Break Time!</h2>
+							<div>
+								You have {parseInt(breakseconds / 60)} minutes and {breakseconds % 60} seconds left until
+								your next work session. Try to avoid checking social media.
+							</div>
 
-					<div class="card-actions justify-end">
-						<button
-							class="m-0.5 rounded-xl border bg-warning p-1 font-semibold hover:bg-yellow-300"
-							onclick={stopTimer}>Stop Timer</button
-						>
-						<button
-							class="m-0.5 rounded-xl border bg-error p-1 font-semibold hover:bg-red-300"
-							onclick={resetTimer}>Reset Timer</button
-						>
+							<ProgressBar color={'bg-success'} current={breakprogress} max={100} />
+						</div>
+
+						<div class="card-actions justify-end">
+							<button
+								class="m-0.5 rounded-xl border bg-warning p-1 font-semibold hover:bg-yellow-300"
+								onclick={stopTimer}>Stop Timer</button
+							>
+							<button
+								class="m-0.5 rounded-xl border bg-error p-1 font-semibold hover:bg-red-300"
+								onclick={resetTimer}>Reset Timer</button
+							>
+						</div>
 					</div>
 				</div>
+				<hr class="mt-2 mb-2" />
+			</li>
+		{/each}
+	</ul>
+	<div class="m-1 w-1/3 border-l p-1">
+		<div class="faustina text-center text-4xl font-semibold">Statistics</div>
+		<hr />
+		<div class="flex justify-around font-semibold">
+			<div class="m-1 h-12 rounded-xl border bg-accent p-2">
+				Tasks Completed: {numTasksCompleted}
 			</div>
-			<hr class="mt-2 mb-2" />
-		</li>
-	{/each}
-</ul>
-
-<div class="m-2 flex justify-around border border-3 border-accent p-2">
-	<div>Tasks Completed: {numTasksCompleted}</div>
-	<div class="tooltip" data-tip="To see how your productivity score is calculated, see How to Use">
-		Productivity Score: {prodScore}
-	</div>
-	<div
-		class="tooltip"
-		data-tip="The number of tasks you have done on or ahead of time divided by the total number of tasks you have completed"
-	>
-		Punctuality: {punctuality * 100}%
+			<div
+				class=" tooltip m-1 h-12 rounded-xl border bg-accent p-2 font-semibold"
+				data-tip="To see how your productivity score is calculated, see How to Use"
+			>
+				Productivity Score: {prodScore}
+			</div>
+			<div
+				class="tooltip m-1 h-12 rounded-xl border bg-accent p-2 font-semibold"
+				data-tip="The number of tasks you have done on or ahead of time divided by the total number of tasks you have completed"
+			>
+				Punctuality: {punctuality * 100}%
+			</div>
+		</div>
 	</div>
 </div>

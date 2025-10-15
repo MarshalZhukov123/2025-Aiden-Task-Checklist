@@ -9,7 +9,7 @@
 	const today = new Date();
 	const formattedToday = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
 	function addTag() {
-		tags.push({ name: inputTag, deleted: false, id: Date.now(), creationDate: formattedToday });
+		tags.push({ name: inputTag, deleted: false, id: Date.now(), creationDate: Date.now() });
 		inputTag = '';
 	}
 	function deleteTag(id) {
@@ -33,6 +33,8 @@
 	let sortedList = $derived(
 		sortKey == 'az' ? sortedList1 : sortKey == 'date' ? sortedList2 : sortedList3
 	);
+
+	let filteredSorted = $derived(sortedList.filter((tag) => tag.deleted == false));
 </script>
 
 <div
@@ -65,7 +67,7 @@
 </div>
 <hr />
 <div class="flex flex-wrap">
-	{#each sortedList as tag}
+	{#each filteredSorted as tag}
 		<div class="m-0.5 p-1">
 			<div class=" m-0.5 rounded-xl border bg-info p-1 font-semibold">
 				{tag.name}
