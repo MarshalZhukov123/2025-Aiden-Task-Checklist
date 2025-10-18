@@ -99,8 +99,8 @@
 	let numTasksCompleted = $state(0);
 	let punctualCompleted = $state(0);
 	let punctuality = $state(1);
-
 	let timeSpentWorking = $state(0);
+	let pomodorosCompleted = $state(0);
 
 	function markComplete(id) {
 		for (let i = 0; i < todos.length; i++) {
@@ -202,6 +202,7 @@
 			} else {
 				workseconds--;
 				workprogress += 100 / iw;
+				timeSpentWorking += 1;
 			}
 		}, 1000);
 	}
@@ -214,6 +215,7 @@
 			if (breakseconds <= 0) {
 				resetWorkTimer();
 				workTimer();
+				pomodorosCompleted += 1;
 			} else {
 				breakseconds--;
 				breakprogress += 100 / ib;
@@ -437,21 +439,33 @@
 	<div class="m-1 w-1/3 border-l p-1">
 		<div class="faustina text-center text-4xl font-semibold">Statistics</div>
 		<hr />
-		<div class="flex justify-around font-semibold">
-			<div class="m-1 h-12 rounded-xl border bg-accent p-2">
+		<div class="flex flex-wrap justify-between text-sm font-semibold">
+			<div class="m-1 flex h-12 rounded-xl border-3 border-accent bg-secondary p-2">
 				Tasks Completed: {numTasksCompleted}
 			</div>
 			<div
-				class=" tooltip m-1 h-12 rounded-xl border bg-accent p-2 font-semibold"
+				class=" tooltip m-1 h-12 rounded-xl border-3 border-accent bg-secondary p-2 font-semibold"
 				data-tip="To see how your productivity score is calculated, see How to Use"
 			>
 				Productivity Score: {prodScore}
 			</div>
 			<div
-				class="tooltip m-1 h-12 rounded-xl border bg-accent p-2 font-semibold"
+				class="tooltip m-1 h-12 rounded-xl border-3 border-accent bg-secondary p-2 font-semibold"
 				data-tip="The number of tasks you have done on or ahead of time divided by the total number of tasks you have completed"
 			>
 				Punctuality: {punctuality * 100}%
+			</div>
+			<div
+				class="tooltip m-1 h-12 rounded-xl border-3 border-accent bg-secondary p-2 font-semibold"
+			>
+				Time Spent Working: {parseInt(timeSpentWorking / 3600)} hours, {parseInt(
+					timeSpentWorking / 60
+				) % 60} minutes, and {timeSpentWorking % 60} seconds
+			</div>
+			<div
+				class="tooltip m-1 h-12 rounded-xl border-3 border-accent bg-secondary p-2 font-semibold"
+			>
+				Pomodoros Completed: {pomodorosCompleted}
 			</div>
 		</div>
 	</div>

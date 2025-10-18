@@ -26,9 +26,6 @@
 			<a class="btn m-2 rounded-xl border-accent btn-secondary hover:bg-yellow-400" href="/tags"
 				>Tags</a
 			>
-			<a class="btn m-2 rounded-xl border-accent btn-secondary hover:bg-yellow-400" href="/stats"
-				>All-Time Stats</a
-			>
 		</div>
 
 		<hr />
