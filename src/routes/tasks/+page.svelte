@@ -78,6 +78,7 @@
 		for (let i = 0; i < todos.length; i++) {
 			if (todos[i].id === id) {
 				todos[i].numPomodoros++;
+				totalNumPomodoros++;
 				break;
 			}
 		}
@@ -89,6 +90,7 @@
 				if (todos[i].numPomodoros == 0) return;
 				else {
 					todos[i].numPomodoros--;
+					totalNumPomodoros--;
 				}
 				break;
 			}
@@ -97,10 +99,16 @@
 
 	let prodScore = $state(0);
 	let numTasksCompleted = $state(0);
+	let numTasksDeleted = $state(0);
 	let punctualCompleted = $state(0);
 	let punctuality = $state(1);
 	let timeSpentWorking = $state(0);
 	let pomodorosCompleted = $state(0);
+	let totalNumPomodoros = $state(0);
+
+	for (let i = 0; i < todosNotComplete.length; i++) {
+		totalNumPomodoros += todosNotComplete[i].numPomodoros;
+	}
 
 	function markComplete(id) {
 		for (let i = 0; i < todos.length; i++) {
@@ -132,10 +140,11 @@
 	}
 
 	function deleteTask(id) {
-		if (!confirm('Are you sure you want to delete this task?')) return;
+		if (!confirm('Are you sure you want to delete this task? This cannot be undone.')) return;
 		for (let i = 0; i < todos.length; i++) {
 			if (todos[i].id === id) {
 				todos[i].isComplete = true;
+				numTasksDeleted++;
 			}
 		}
 	}
@@ -441,7 +450,13 @@
 		<hr />
 		<div class="flex flex-wrap justify-between text-sm font-semibold">
 			<div class="m-1 flex h-12 rounded-xl border-3 border-accent bg-secondary p-2">
+				Current Tasks: {todosNotComplete.length}
+			</div>
+			<div class="m-1 flex h-12 rounded-xl border-3 border-accent bg-secondary p-2">
 				Tasks Completed: {numTasksCompleted}
+			</div>
+			<div class="m-1 flex h-12 rounded-xl border-3 border-accent bg-secondary p-2">
+				Tasks Deleted: {numTasksDeleted}
 			</div>
 			<div
 				class=" tooltip m-1 h-12 rounded-xl border-3 border-accent bg-secondary p-2 font-semibold"
@@ -449,23 +464,29 @@
 			>
 				Productivity Score: {prodScore}
 			</div>
-			<div
-				class="tooltip m-1 h-12 rounded-xl border-3 border-accent bg-secondary p-2 font-semibold"
-				data-tip="The number of tasks you have done on or ahead of time divided by the total number of tasks you have completed"
-			>
-				Punctuality: {punctuality * 100}%
+			<div class="m-1 h-12 rounded-xl border-3 border-red-300 bg-error p-2 font-semibold">
+				Pomodoros Completed: {pomodorosCompleted}
 			</div>
+
 			<div
-				class="tooltip m-1 h-12 rounded-xl border-3 border-accent bg-secondary p-2 font-semibold"
+				class="tooltip m-1 h-12 rounded-xl border-3 border-red-300 bg-error p-2 font-semibold"
+				data-tip="Based on your usage of the built-in pomodoro timer"
 			>
 				Time Spent Working: {parseInt(timeSpentWorking / 3600)} hours, {parseInt(
 					timeSpentWorking / 60
 				) % 60} minutes, and {timeSpentWorking % 60} seconds
 			</div>
 			<div
-				class="tooltip m-1 h-12 rounded-xl border-3 border-accent bg-secondary p-2 font-semibold"
+				class="tooltip m-1 h-12 rounded-xl border-3 border-red-300 bg-error p-2 font-semibold"
+				data-tip="The total number of pomodoros across all of your tasks, multiplied by 30"
 			>
-				Pomodoros Completed: {pomodorosCompleted}
+				Estimated Time Until All Remaining Tasks are Compelete: {totalNumPomodoros * 30} minutes
+			</div>
+			<div
+				class="tooltip m-1 h-12 rounded-xl border-3 border-green-300 bg-success p-2 font-semibold"
+				data-tip="The number of tasks you have done on or ahead of time divided by the total number of tasks you have completed"
+			>
+				Punctuality: {punctuality * 100}%
 			</div>
 		</div>
 	</div>
