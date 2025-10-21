@@ -1,17 +1,27 @@
 <script>
-	
 </script>
-<div class="flex justify-center text-6xl faustina p-3 bg-primary text-black">Placeholder Title</div>
 
-<hr/>
+<div class="faustina flex justify-center bg-primary p-3 text-6xl text-black">Ergotactical</div>
 
-<div class="montserrat text-xl flex justify-around bg-gradient-to-br from-secondary to-base-300 text-black">
-	<a class="font-semibold hover:animate-pulse border-primary btn btn-secondary m-2 rounded-xl" href="/intro">Introduction</a>
+<hr />
+
+<div
+	class="montserrat flex justify-around bg-gradient-to-br from-secondary to-base-300 text-xl text-black"
+>
+	<a
+		class="btn m-2 rounded-xl border-primary font-semibold btn-secondary hover:animate-pulse"
+		href="/intro">Introduction</a
+	>
 	<div class="m-3">•</div>
-	<a class="font-semibold hover:animate-pulse border-primary btn btn-secondary m-2 rounded-xl" href="/how-to-use">How to Use</a>
+	<a
+		class="btn m-2 rounded-xl border-primary font-semibold btn-secondary hover:animate-pulse"
+		href="/how-to-use">How to Use</a
+	>
 	<div class="m-3">•</div>
-	<a class="font-semibold hover:animate-pulse border-primary btn btn-secondary m-2 rounded-xl" href="/settings">Settings</a>
+	<a
+		class="btn m-2 rounded-xl border-primary font-semibold btn-secondary hover:animate-pulse"
+		href="/settings">Settings</a
+	>
 </div>
 
-<hr/>
-
+<hr />

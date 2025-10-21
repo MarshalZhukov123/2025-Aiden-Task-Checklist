@@ -14,18 +14,10 @@
 
 		<div class="flex justify-around bg-gradient-to-br from-base-content via-neutral to-primary">
 			<a class="btn m-2 rounded-xl border-accent btn-secondary" href="/">Home</a>
-			<a class="btn m-2 rounded-xl border-accent btn-secondary hover:btn-error" href="/pomodoro"
-				>Pomodoro</a
-			>
-			<a class="btn m-2 rounded-xl border-accent btn-secondary hover:btn-warning" href="/tasks"
+			<a class="btn m-2 rounded-xl border-accent btn-secondary hover:btn-success" href="/tasks"
 				>Task Checklist</a
 			>
-			<a class="btn m-2 rounded-xl border-accent btn-secondary hover:btn-success" href="/habits"
-				>Habit Builder</a
-			>
-			<a class="btn m-2 rounded-xl border-accent btn-secondary hover:bg-yellow-400" href="/tags"
-				>Tags</a
-			>
+			<a class="btn m-2 rounded-xl border-accent btn-secondary hover:bg-info" href="/tags">Tags</a>
 		</div>
 
 		<hr />

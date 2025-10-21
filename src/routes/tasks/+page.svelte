@@ -1,6 +1,5 @@
 <script>
 	let categories = $state(['Home', 'Work', 'School']);
-	import filteredSorted from '../tags/+page.svelte';
 
 	let todos = $state([
 		{
@@ -12,7 +11,7 @@
 			dueDate: '',
 			importance: 1,
 			subTodos: [{ subName: "Here's a subtask" }, { subName: "And here's another" }],
-			category: 'Category 1'
+			category: 'Example Tag 1'
 		},
 
 		{
@@ -24,7 +23,7 @@
 			dueDate: '',
 			importance: 2,
 			subTodos: [],
-			category: 'Category 2'
+			category: 'Example Tag 2'
 		},
 		{
 			inputSubTodo: '',
@@ -35,7 +34,7 @@
 			dueDate: '',
 			importance: 3,
 			subTodos: [],
-			category: 'Category 3'
+			category: 'Example Tag 3'
 		}
 	]);
 	let todosNotComplete = $derived(todos.filter((v) => v.isComplete == false));
@@ -45,6 +44,23 @@
 	let inputImportance = $state('');
 	let inputSubTodos = $state([]);
 	let inputCategory = $state('');
+
+	onMount(() => {
+		let t = localStorage.getItem('tags');
+
+		if (t !== null) {
+			t = JSON.parse(t).map((v) => v.name);
+			categories = [...categories, ...t];
+		}
+	});
+
+	onMount(() => {
+		let tasks = localStorage.getItem('todos');
+
+		if (tasks !== null) {
+			todos = JSON.parse(tasks);
+		}
+	});
 
 	function add() {
 		todos.push({
@@ -63,6 +79,7 @@
 		inputImportance = '';
 		inputSubTodos = [];
 		inputCategory = '';
+		localStorage.setItem('todos', JSON.stringify(todos));
 	}
 
 	function subAdd(id) {
@@ -72,6 +89,7 @@
 				todos[i].inputSubTodo = '';
 			}
 		}
+		localStorage.setItem('todos', JSON.stringify(todos));
 	}
 
 	function addP(id) {
@@ -82,6 +100,7 @@
 				break;
 			}
 		}
+		localStorage.setItem('todos', JSON.stringify(todos));
 	}
 
 	function subP(id) {
@@ -95,6 +114,7 @@
 				break;
 			}
 		}
+		localStorage.setItem('todos', JSON.stringify(todos));
 	}
 
 	let prodScore = $state(0);
@@ -137,6 +157,7 @@
 				break;
 			}
 		}
+		localStorage.setItem('todos', JSON.stringify(todos));
 	}
 
 	function deleteTask(id) {
@@ -147,6 +168,7 @@
 				numTasksDeleted++;
 			}
 		}
+		localStorage.setItem('todos', JSON.stringify(todos));
 	}
 
 	function flag(id) {
@@ -156,6 +178,7 @@
 				break;
 			}
 		}
+		localStorage.setItem('todos', JSON.stringify(todos));
 	}
 
 	function unflag(id) {
@@ -170,10 +193,18 @@
 		}
 	}
 
+	function clearUserData() {
+		if (!confirm('Are you sure you want to clear your data for this page? This cannot be undone.'))
+			return;
+		localStorage.clear();
+		window.location.reload();
+	}
+
 	const today = new Date();
 	let formattedToday = today.getFullYear() + '-' + (today.getMonth() + 1) + '-0' + today.getDate();
 
 	import ProgressBar from '../../components/ProgressBar.svelte';
+	import { onMount } from 'svelte';
 
 	// iw is short for "initial work [timer length]"; ib is short for "initial break [timer length]". These stand in for the values of 1500 and 300 seconds, respectively, in order to make test cases easier to check.
 
@@ -266,47 +297,53 @@
 <div
 	class="faustina flex justify-center bg-gradient-to-br from-success to-green-800/50 p-3 text-6xl text-black"
 >
-	Task Checklist
+	Ergotactical
 </div>
 <hr />
-<div class="bg-gradient-to-br from-base-content via-neutral to-primary">
-	<input
-		class="m-2 rounded-xl border bg-secondary p-2 text-black focus:ring-2 focus:ring-primary focus:outline-none"
-		placeholder="Add a new task..."
-		bind:value={inputTxt}
-	/>
+<div class="flex justify-between bg-gradient-to-br from-base-content via-neutral to-primary">
+	<div class="flex-grow">
+		<input
+			class="m-2 rounded-xl border bg-secondary p-2 text-black focus:ring-2 focus:ring-primary focus:outline-none"
+			placeholder="Add a new task..."
+			bind:value={inputTxt}
+		/>
 
-	<input
-		bind:value={inputDate}
-		placeholder="Pick Due Date"
-		class="m-2 rounded-xl border bg-secondary p-2 text-black focus:ring-2 focus:ring-primary focus:outline-none"
-		type="date"
-	/>
+		<input
+			bind:value={inputDate}
+			placeholder="Pick Due Date"
+			class="m-2 rounded-xl border bg-secondary p-2 text-black focus:ring-2 focus:ring-primary focus:outline-none"
+			type="date"
+		/>
 
-	<select
-		class="select m-2 rounded-xl border bg-secondary p-2 text-black select-secondary focus:ring-2 focus:ring-primary focus:outline-none"
-		bind:value={inputImportance}
-	>
-		<option value={''} disabled selected>Task Importance</option>
-		<option value={1}>★</option>
-		<option value={2}>★★</option>
-		<option value={3}>★★★</option>
-	</select>
+		<select
+			class="select m-2 rounded-xl border bg-secondary p-2 text-black select-secondary focus:ring-2 focus:ring-primary focus:outline-none"
+			bind:value={inputImportance}
+		>
+			<option value={''} disabled selected>Task Importance</option>
+			<option value={1}>★</option>
+			<option value={2}>★★</option>
+			<option value={3}>★★★</option>
+		</select>
 
-	<select
-		class="select m-2 rounded-xl border bg-secondary p-2 text-black select-secondary focus:ring-2 focus:ring-primary focus:outline-none"
-		bind:value={inputCategory}
-	>
-		<option value={''} disabled selected>Tags</option>
-		{#each categories as c}
-			<option value={c}>{c}</option>
-		{/each}
-	</select>
+		<select
+			class="select m-2 rounded-xl border bg-secondary p-2 text-black select-secondary focus:ring-2 focus:ring-primary focus:outline-none"
+			bind:value={inputCategory}
+		>
+			<option value={''} disabled selected>Tags</option>
+			{#each categories as c}
+				<option value={c}>{c}</option>
+			{/each}
+		</select>
 
+		<button
+			class="m-2 rounded-xl border bg-secondary p-2 font-semibold hover:bg-primary disabled:text-gray-500"
+			onclick={add}
+			disabled={inputTxt.length == 0}>Add Task</button
+		>
+	</div>
 	<button
-		class="m-2 rounded-xl border bg-secondary p-2 font-semibold hover:bg-primary disabled:text-gray-500"
-		onclick={add}
-		disabled={inputTxt.length == 0}>Add Task</button
+		class="m-2 rounded-xl border bg-error p-2 font-semibold text-black hover:bg-red-300 focus:ring-2 focus:ring-red-300 focus:outline-none"
+		onclick={clearUserData}>Clear User Data</button
 	>
 </div>
 <hr />
@@ -449,6 +486,12 @@
 		<div class="faustina text-center text-4xl font-semibold">Statistics</div>
 		<hr />
 		<div class="flex flex-wrap justify-between text-sm font-semibold">
+			<div
+				class=" tooltip m-1 h-12 rounded-xl border-3 border-purple-300 bg-info p-2 font-semibold"
+				data-tip="Calculated based on the importance, number of pomodoros, number of subtasks, and completion date of all tasks"
+			>
+				Productivity Score: {prodScore}
+			</div>
 			<div class="m-1 flex h-12 rounded-xl border-3 border-accent bg-secondary p-2">
 				Current Tasks: {todosNotComplete.length}
 			</div>
@@ -457,12 +500,6 @@
 			</div>
 			<div class="m-1 flex h-12 rounded-xl border-3 border-accent bg-secondary p-2">
 				Tasks Deleted: {numTasksDeleted}
-			</div>
-			<div
-				class=" tooltip m-1 h-12 rounded-xl border-3 border-accent bg-secondary p-2 font-semibold"
-				data-tip="To see how your productivity score is calculated, see How to Use"
-			>
-				Productivity Score: {prodScore}
 			</div>
 			<div class="m-1 h-12 rounded-xl border-3 border-red-300 bg-error p-2 font-semibold">
 				Pomodoros Completed: {pomodorosCompleted}

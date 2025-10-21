@@ -1,24 +1,38 @@
 <script>
+	import { onMount } from 'svelte';
+
 	let tags = $state([
-		{ name: 'Tag 1', deleted: false, id: 1, creationDate: '' },
-		{ name: 'Tag 2', deleted: false, id: 2, creationDate: '' },
-		{ name: 'Tag 3', deleted: false, id: 3, creationDate: '' }
+		{ name: 'Example Tag 1', deleted: false, id: 1, creationDate: '' },
+		{ name: 'Example Tag 2', deleted: false, id: 2, creationDate: '' },
+		{ name: 'Example Tag 3', deleted: false, id: 3, creationDate: '' }
 	]);
 	let kepttags = $derived(tags.filter((tag) => tag.deleted == false));
 	let inputTag = $state('');
 	const today = new Date();
 	const formattedToday = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+
+	onMount(() => {
+		let t = localStorage.getItem('tags');
+
+		if (t !== null) {
+			tags = JSON.parse(t);
+		}
+	});
+
 	function addTag() {
 		tags.push({ name: inputTag, deleted: false, id: Date.now(), creationDate: Date.now() });
 		inputTag = '';
+		localStorage.setItem('tags', JSON.stringify(tags));
 	}
 	function deleteTag(id) {
 		// if (!confirm('Are you sure?')) return;
-		for (let i = 0; i < tags.length; i++) {
-			if (tags[i].id === id) {
-				tags[i].deleted = true;
-			}
-		}
+		// for (let i = 0; i < tags.length; i++) {
+		// 	if (tags[i].id === id) {
+		// 		tags[i].deleted = true;
+		// 	}
+		// }
+		tags = tags.filter((t) => t.id !== id);
+		localStorage.setItem('tags', JSON.stringify(tags));
 	}
 	let sortKey = $state('az');
 
