@@ -37,7 +37,8 @@
 					<div class="faustina text-center text-2xl font-semibold">Task Checklist Page</div>
 					<li>• Whenever you're ready, hit the "Task Checklist" button</li>
 					<li>
-						• There are plenty of tooltips, so simply hover over something if you are confused
+						• There are plenty of tooltips for statistics, so simply hover over one of them if you
+						want to see how it is calculated
 					</li>
 				</ul>
 				<img
