@@ -194,8 +194,7 @@
 	}
 
 	function clearUserData() {
-		if (!confirm('Are you sure you want to clear your data for this page? This cannot be undone.'))
-			return;
+		if (!confirm('Are you sure you want to clear your data? This cannot be undone.')) return;
 		localStorage.clear();
 		window.location.reload();
 	}
@@ -297,7 +296,7 @@
 <div
 	class="faustina flex justify-center bg-gradient-to-br from-success to-green-800/50 p-3 text-6xl text-black"
 >
-	Ergotactical
+	Task Checklist
 </div>
 <hr />
 <div class="flex justify-between bg-gradient-to-br from-base-content via-neutral to-primary">
